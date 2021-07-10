@@ -55,7 +55,8 @@ for(x in 1:length(nota)){
   }
 }
 
-#5
+#5 
+resultados<-data.frame(grupo,nota)
 #a
 sum(nota[1:10])
 #b
@@ -70,7 +71,6 @@ for(x in 1:length(nota)){
 }
 length(aprobados)
 
-resultados<-data.frame(grupo,nota)
 #d
 new2<-resultados[resultados$grupo=="B"&resultados$nota>5,]
 length(new2$grupo)
@@ -90,15 +90,15 @@ g_m<-resultados[resultados$grupo==c("A","B")&resultados$nota>5,]
 mean(g_m$nota)
 
 #6
-
-
+p66T<-quantile(resultados$nota,0.66)
+p66C<-quantile(mew$nota,0.66)
 
 #7
-
-
+mq5<-length(nota[nota<=4.9])
+alum<-length(nota)
+100*mq5/alum
 #8
-
-
+boxplot(nota ~ grupo, data = resultados)
 
 #9
 conc
@@ -133,6 +133,12 @@ for(x in 1:length(conc)){
 mindemedicion<-(min*142)%%60
 horademedicion<-(min*142-mindemedicion)/60
 
+minutos<- seq(
+  as.POSIXct("2020-01-01 00:00", format("%y-%m-%d- %H:%M")),
+  as.POSIXct("2020-01-01 23:59", format("%y-%m-%d- %H:%M")),
+  by="5 min"
+)
+
 #parte2
 
 #1
@@ -160,8 +166,100 @@ B
 
 #6
 t(A)
+
 #7
-A+B
+A+B #no tienen las mismas dimenciones
+A-B #no tienen las mismas dimenciones
+3*B
+A%*%B #no se puede por que las filas 
+      #y columnas son diferentes
+
+#8
+me<-function(e){
+  d<-c(1,-2,1,2,4,0,3,-2,1)
+  m<-matrix(d,ncol = 3)
+  r<-m^e
+  return(r)
+}
+me(6)
+
+#9
+SS3v<-function(v,r){
+  m<-matrix(v,ncol = 3)
+  ds<-det(m)
+  for (n in 1:length(r)) {
+    if(n==1){
+      m<-matrix(v,ncol = 3)
+      m[,n]<-r
+      dx<-det(m)
+    }else if(n==2){
+      m<-matrix(v,ncol = 3)
+      m[,n]<-r
+      dy<-det(m)
+    }else{
+      m<-matrix(v,ncol = 3)
+      m[,n]<-r
+      dz<-det(m)
+    }
+  }
+  x<-dx/ds
+  y<-dy/ds
+  z<-dz/ds
+  r<-c(x,y,z)
+  return(r)
+}
+v1<-c(3,9,3,-1,-2,1,1,1,-2)
+rs1<-c(-1,-9,-9)
+SS3v(v1,rs1)
+
+#10
+?eigen
+?det
+
+#11
+C1<-seq(1,10,1)
+C2<-seq(1,10,1)*2
+C3<-seq(1,10,1)*3
+C4<-seq(1,10,1)*4
+C5<-seq(1,10,1)*5
+B<-cbind(C1,C2,C3,C4,C5)
 B
-eigen(diag(4))
-det(diag(4))
+
+A<-matrix(rep(c(0,1)), ncol = 5,nrow = 5)
+rep(c(0,1,0),2)
+A[4:5,]<-c(0,1,1,0,0,1,0,1,1,0)
+A
+A%*%B # columnas de A=5 y filas de B=10 no se peude mutiplicar
+      # por lo tanto no se puede saber la traspuesta
+#12
+x<-matrix(1,5,2)
+x[2,2]<--2
+x[3,2]<-0
+x[5,2]<-2
+x
+y<-matrix(1,5,1)
+y[1:2,1]<-0
+y[5,1]<-3
+y
+inr<-t(x)%*%x
+mi<-solve(inr)
+cf<-mi%*%t(x)
+cf%*%y
+
+#13
+data("co2")
+means= aggregate(co2, FUN=mean)
+year = as.vector(time(means))
+co2= as.vector(means)
+co2
+year
+
+diferenciasco2<-c()
+for(x in 1:length(year)){
+  r<- co2[x+1]-co2[x]
+    diferenciasco2<-c(diferenciasco2,r)
+}
+diferenciasco2
+plot(year,diferenciasco2, type = "b",pch=4 )
+
+#14 no entiendo :"v
